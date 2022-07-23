@@ -1,0 +1,28 @@
+{
+  "name": "fallout4-auto-translator",
+  "version": "1.0.0",
+  "description": "auto translate MCN config text.",
+  "main": "fallout4-auto-translator.exe",
+  "scripts": {
+    "test": "tsc && node ./dist/index.js 'E:\\games\\Fallout 4\\Mod Organizer\\mods'",
+    "build": "nexe --input ./dist/index.js --output ./releases",
+    "test:translate-mcm": "node ./test/translate-mcm.js"
+  },
+  "author": "zfang1995",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^9.4.0",
+    "deepmerge": "^4.2.2",
+    "fs-jetpack": "^4.3.1",
+    "lodash": "^4.17.21",
+    "p-limit": "^4.0.0",
+    "translate": "^1.4.1",
+    "traverse": "^0.6.6"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@types/commander": "^2.12.2",
+    "@types/lodash": "^4.14.182",
+    "@types/traverse": "^0.6.32"
+  }
+}
