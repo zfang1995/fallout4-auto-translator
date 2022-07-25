@@ -4,7 +4,7 @@
   "description": "auto translate MCN config text.",
   "main": "fallout4-auto-translator.exe",
   "scripts": {
-    "test": "tsc && node ./dist/index.js 'E:\\games\\Fallout 4\\Mod Organizer\\mods'",
+    "test": "node ./dist/index.js --mods_dir playground\\mods --fileList playground\\mcmlist.txt",
     "build": "nexe --input ./dist/index.js --output ./releases",
     "test:translate-mcm": "node ./test/translate-mcm.js"
   },
@@ -23,6 +23,7 @@
   "devDependencies": {
     "@types/commander": "^2.12.2",
     "@types/lodash": "^4.14.182",
+    "@types/node": "^18.0.6",
     "@types/traverse": "^0.6.32"
   }
 }

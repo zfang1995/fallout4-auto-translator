@@ -14,13 +14,13 @@ let _translate = function _translate(text:string) {
     let htmlTextContent = matched ? matched[0] : '';
     return htmlTextContent ? translate(htmlTextContent).then(translatedText => text.replace(htmlTextContent, translatedText)) : translate(text);
   } else {
-    return Promise.resolve(text);
+    return Promise.resolve(text); // return the original text to avoid error
   }
 }
 let __translate = lodash.partial(pLimit(8), _translate);
 
 
-let mcmTranslator = async function mcmTranslator(mcmConfigPath:string, options: object = {}) {
+let mcmTranslator = async function mcmTranslator(mcmConfigPath:string, options: mcmTranslatorOptions = {}) {
   const fileContent = fsJetpack.read(mcmConfigPath);
   if (fileContent === undefined) {
     console.error(`given path -- "${mcmConfigPath}" does not exist.`)
@@ -34,7 +34,6 @@ let mcmTranslator = async function mcmTranslator(mcmConfigPath:string, options: 
     })
     await Promise.all(translateQueue);
     let translatedContent = JSON.stringify(mcmConfig);
-    //@ts-ignore
     if (options.withBackup) {
       fsJetpack.write(mcmConfigPath+'.backup', fileContent)
     }

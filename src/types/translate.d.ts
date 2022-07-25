@@ -11,3 +11,20 @@ declare module 'translate' {
   let q : translate;
   export default q
 }
+
+declare interface translatorOptions {
+  from?: string;
+  to?: string;
+  cache?: number;
+  engine?: 'google' |'yandex' |'libre' | 'deepl' ;
+  key?: string;
+  url?: string;
+}
+
+declare interface translator {
+  (text: string, options?: translatorOptions): Promise<string>;
+}
+
+declare interface mcmTranslatorOptions extends translatorOptions {
+  withBackup?: boolean;
+}
