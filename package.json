@@ -3,6 +3,13 @@
   "version": "1.0.0",
   "description": "auto translate MCN config text.",
   "main": "fallout4-auto-translator.exe",
+  "pkg": {
+    "scripts": "dist/**/*.js",
+    "targets": [
+      "node16-linux-x64",
+      "node16-win-x64"
+    ]
+  },
   "scripts": {
     "test": "node ./dist/index.js --mods_dir playground\\mods --fileList playground\\mcmlist.txt",
     "build": "nexe --input ./dist/index.js --output ./releases",
@@ -11,10 +18,13 @@
   "author": "zfang1995",
   "license": "ISC",
   "dependencies": {
+    "@funny_town/pipeline.js": "^1.0.6",
+    "chardet": "^1.4.0",
     "commander": "^9.4.0",
     "deepmerge": "^4.2.2",
     "fs-jetpack": "^4.3.1",
     "lodash": "^4.17.21",
+    "md5": "^2.3.0",
     "p-limit": "^4.0.0",
     "translate": "^1.4.1",
     "traverse": "^0.6.6"
@@ -23,7 +33,9 @@
   "devDependencies": {
     "@types/commander": "^2.12.2",
     "@types/lodash": "^4.14.182",
+    "@types/md5": "^2.3.2",
     "@types/node": "^18.0.6",
-    "@types/traverse": "^0.6.32"
+    "@types/traverse": "^0.6.32",
+    "caxa": "^2.1.0"
   }
 }

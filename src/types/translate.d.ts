@@ -12,9 +12,9 @@ declare module 'translate' {
   export default q
 }
 
-declare interface translatorOptions {
-  from?: string;
-  to?: string;
+declare interface translateOptions {
+  from: string = 'en';
+  to: string = 'zh';
   cache?: number;
   engine?: 'google' |'yandex' |'libre' | 'deepl' ;
   key?: string;
@@ -22,9 +22,20 @@ declare interface translatorOptions {
 }
 
 declare interface translator {
-  (text: string, options?: translatorOptions): Promise<string>;
+  (options?: translateOptions): Promise<string>;
 }
 
-declare interface mcmTranslatorOptions extends translatorOptions {
-  withBackup?: boolean;
+declare interface mcmTranslatorOptions extends translateOptions {
+  backupOrigin?: boolean = true;
+}
+
+declare interface modTranslatorOptions extends translateOptions {
+  backupOrigin?: boolean = true;
+  fileList?: string;
+  mods_dir?: string;
+}
+
+declare interface stringTranslatorOptions extends translateOptions {
+  forceTranslate?: boolean = false;
+  exTransLib?: any
 }
