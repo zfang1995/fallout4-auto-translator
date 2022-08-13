@@ -21,18 +21,28 @@ declare interface translateOptions {
   url?: string;
 }
 
+
 declare interface translator {
   (options?: translateOptions): Promise<string>;
 }
 
+
 declare interface mcmTranslatorOptions extends translateOptions {
-  backupOrigin?: boolean = true;
+  overwriteOrigin?: boolean = false;
+  outputDir: string;
 }
 
+declare interface espTranslatorOptions extends translateOptions {
+  overwriteOrigin?: boolean = false;
+  outputDir: string;
+}
+
+
 declare interface modTranslatorOptions extends translateOptions {
-  backupOrigin?: boolean = true;
+  overwriteOrigin?: boolean = false;
+  outputDir?: string;
   fileList?: string;
-  mods_dir?: string;
+  modsDir?: string;
 }
 
 declare interface stringTranslatorOptions extends translateOptions {

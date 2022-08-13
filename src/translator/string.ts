@@ -1,5 +1,6 @@
 import translate from "translate";
 translate.from = 'english',translate.to = 'chinese';
+// TODO: 给translate的 node fetch error，增加retry机制。
 import partial from 'lodash/partial.js';
 import pLimit from "p-limit";
 const pLimitedTranslate = partial(pLimit(8), (a:string,b?:stringTranslatorOptions) => translate(a,b));

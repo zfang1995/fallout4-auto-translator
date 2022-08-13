@@ -76,14 +76,16 @@ const mcmTranslator = async function mcmTranslator(mcmConfigPath:string, options
     console.error(`given path -- "${mcmConfigPath}" does not exist.`)
   } else {
     const mcmConfig:JSON = JSON.parse(fileContent);
-    const i18nTransDir = path.resolve(mcmConfigPath, '..\\..\\..\\..\\Interface\\Translations');
+    const mod_dir = path.resolve(mcmConfigPath, '..\\..\\..\\..\\');
+    const i18nTransDir = path.resolve(mod_dir,'Interface\\Translations');
     let useI18n = fsJetpack.exists(i18nTransDir) ? true :false ;
     let _options: stringTranslatorOptions;
     if (useI18n) {_options = Object.assign({exTransLib: new ExternalTranslationLibrary(i18nTransDir, options)}, options);}
     traverse(mcmConfig).forEach(function (val){
       if (
-        (this.key && keyWords.includes(this.key)) ||
-        (this.parent?.key === 'options' && this.parent.parent?.key === 'valueOptions' )
+        (this.key && keyWords.includes(this.key)) 
+        // || (this.parent?.key === 'options' && this.parent.parent?.key === 'valueOptions' )
+        // ↑ valueOptions 的值通常都是1~2个词的短句，翻译工具很难凭借如此少量的信息给出准确的翻译，所以这里不翻译 valueOptions。
       ) {
         let text:string = val;
         let translating = new Promise((resolve) => {
@@ -93,11 +95,12 @@ const mcmTranslator = async function mcmTranslator(mcmConfigPath:string, options
       }
     })
     await Promise.all(translateQueue);
-    if (options.backupOrigin) {
-      fsJetpack.write(mcmConfigPath+'.backup', fileContent)
+    // TODO: save translatedContent to outputDir.
+    if (options.overwriteOrigin) {
+      fsJetpack.write(mcmConfigPath, JSON.stringify(mcmConfig));
+    } else {
+      fsJetpack.write(path.resolve(options.outputDir, path.relative(mod_dir,mcmConfigPath)), JSON.stringify(mcmConfig))
     }
-    // save translatedContent to file system.
-    fsJetpack.write(mcmConfigPath, JSON.stringify(mcmConfig));
   }
 }
 
