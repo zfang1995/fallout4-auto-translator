@@ -12,11 +12,12 @@ translatorCLI
   .option('--modsDir <path>', 'modsDir to translate.')
   .option('--overwriteOrigin', 'overwrite the original files instead of make copy.', false)
   .option('--fileList <path>', 'provide a file list to translate.')
+  .option('--bilingual', 'provide bilingual translation.', false)
+  .option('--detectAndSkipTranslatedString', 'detect And Skip Translated String', false)
   .action((options) => {
     console.log("translating...");
     translator(options).then(response => {
       console.log(response);
-      console.log('done.');
     })
   });
 ;

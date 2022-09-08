@@ -8,28 +8,28 @@ import {default as stringTranslator, isTranslated} from './string.js';
 class ExternalTranslationLibrary {
   // create translations dictionary.
   dict: any;
-  originTranslations: string;
+  originalDocs: string;
   translationsPath: string[] | undefined;
   targetTranslations: string;
   constructor(translationsDir:string, {from:originLanguage = 'en', to:targetLanguage}:mcmTranslatorOptions) {
     this.dict = {[originLanguage]:{},[targetLanguage]:{}};
     // 从现有的文件中读取原本和译本。
-    this.originTranslations = '';
+    this.originalDocs = '';
     this.targetTranslations = '';
     let mayTranslated = false;
     const translationsPath = fsJetpack.list(translationsDir)?.map(file => path.join(translationsDir, file));
     translationsPath && translationsPath.forEach(filePath => {
       const iso639Code = path.basename(filePath.toLowerCase(), '.txt').split('_').pop();
       if (iso639Code === originLanguage) {
-        this.originTranslations = fsJetpack.read(filePath, 'utf8') || '';
+        this.originalDocs = fsJetpack.read(filePath, 'utf8') || '';
       } else if (iso639Code === targetLanguage) {
         this.dict[targetLanguage]['%filePath%'] = filePath;
         this.targetTranslations = fsJetpack.read(filePath, 'utf8') || '';
-        mayTranslated =(!!this.targetTranslations) && (this.targetTranslations !== this.originTranslations);
+        mayTranslated =(!!this.targetTranslations) && (this.targetTranslations !== this.originalDocs);
       }      
     });
     // 如果没有原本，则报错
-    if (this.originTranslations === '') throw new Error('origin translation not found.');
+    if (this.originalDocs === '') throw new Error('origin translation not found.');
     // 如果现成的译本也许可用，则先用该译本构建词典，再用机器翻译原本来校正、重构该词典。
     if (mayTranslated) {
       this.targetTranslations.split('\r\n')
@@ -38,9 +38,10 @@ class ExternalTranslationLibrary {
         this.dict[targetLanguage][key] = value;
       });
     }
-    this.originTranslations?.split('\r\n')
+    this.originalDocs?.split('\r\n')
     .map(line => line.split('\t'))
     .forEach(([key, value]) => {
+      this.dict[originLanguage][key] = value;
       this.dict[targetLanguage][key] = (mayTranslated && isTranslated(this.dict[targetLanguage][key], targetLanguage)) ? this.dict[targetLanguage][key] : stringTranslator(value, {from:originLanguage,to:targetLanguage});
     });
   }
@@ -69,17 +70,17 @@ class ExternalTranslationLibrary {
     }
   }
 }
-
-const mcmTranslator = async function mcmTranslator(mcmConfigPath:string, options: mcmTranslatorOptions) {
+//TODO: 在mcmConfig 中尝试嵌入:hover html 来实现展示双语。
+const mcmTranslator = async function mcmTranslator(mcmConfigPath:string, options: mcmTranslatorOptions): Promise<string> {
   const fileContent = fsJetpack.read(mcmConfigPath);
   if (fileContent === undefined) {
-    console.error(`given path -- "${mcmConfigPath}" does not exist.`)
+    throw new Error(`given path -- "${mcmConfigPath}" does not exist.`)
   } else {
     const mcmConfig:JSON = JSON.parse(fileContent);
     const mod_dir = path.resolve(mcmConfigPath, '..\\..\\..\\..\\');
     const i18nTransDir = path.resolve(mod_dir,'Interface\\Translations');
     let useI18n = fsJetpack.exists(i18nTransDir) ? true :false ;
-    let _options: stringTranslatorOptions;
+    let _options: stringTranslatorOptions = options;
     if (useI18n) {_options = Object.assign({exTransLib: new ExternalTranslationLibrary(i18nTransDir, options)}, options);}
     traverse(mcmConfig).forEach(function (val){
       if (
@@ -95,12 +96,12 @@ const mcmTranslator = async function mcmTranslator(mcmConfigPath:string, options
       }
     })
     await Promise.all(translateQueue);
-    // TODO: save translatedContent to outputDir.
-    if (options.overwriteOrigin) {
-      fsJetpack.write(mcmConfigPath, JSON.stringify(mcmConfig));
-    } else {
-      fsJetpack.write(path.resolve(options.outputDir, path.relative(mod_dir,mcmConfigPath)), JSON.stringify(mcmConfig))
-    }
+    // if (options.overwriteOrigin) {
+    //   fsJetpack.write(mcmConfigPath, JSON.stringify(mcmConfig));
+    // } else {
+    //   fsJetpack.write(path.resolve(options.outputDir, path.relative(mod_dir,mcmConfigPath)), JSON.stringify(mcmConfig))
+    // }
+    return JSON.stringify(mcmConfig)
   }
 }
 
