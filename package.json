@@ -1,6 +1,6 @@
 {
   "name": "fallout4-auto-translator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "auto translate MCN config text.",
   "main": "fallout4-auto-translator.exe",
   "pkg": {

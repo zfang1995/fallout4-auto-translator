@@ -35,3 +35,7 @@ End with an example of getting some data out of the system or using it for a lit
 ## Usage <a name = "usage"></a>
 
 Add notes about how to use the system.
+
+## 开发计划
+### 1.0.1
+*  提供两个模组对照翻译的功能。

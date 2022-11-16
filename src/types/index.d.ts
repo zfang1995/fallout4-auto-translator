@@ -20,6 +20,7 @@ declare interface translateOptions {
   key?: string;
   url?: string;
   bilingual?: boolean = false;
+  exTransLib?: any;
 }
 
 
