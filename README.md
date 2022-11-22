@@ -15,22 +15,11 @@ translate multiple mods in seconds.
 
 
 ### Installing
-
-A step by step series of examples that tell you how to get a development env running.
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo.
+1. install nodeJs V12 or later.
+2. install python V27 ~ V38.
+3. run ```npm install --global --production windows-build-tools``` as Administrator.
+4. run ```npm config set python /path/to/executable/python``.
+5. change working-directory to this project root dir, then run ```npm install```.
 
 ## Usage <a name = "usage"></a>
 

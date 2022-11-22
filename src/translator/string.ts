@@ -37,7 +37,7 @@ const isTranslated = (text: string, targetLanguage: string): boolean => {
 const stringTranslator = partial(pLimit(16), function (text:string, options:stringTranslatorOptions = defaultTranslateOptions) {
   let translating: Promise<string>;
   if (text) {
-    if (options && (options.detectAndSkipTranslatedString || isTranslated(text, options.to))) {
+    if (options && (options.skipTranslatedString && isTranslated(text, options.to))) {
       translating = Promise.resolve(text);
     } else if (options && options.exTransLib && text.startsWith('$')) {
       translating = Promise.resolve(options.exTransLib.dict[options.to]?.[text])

@@ -48,11 +48,11 @@ declare interface modTranslatorOptions extends translateOptions {
   outputDir?: string;
   fileList?: string;
   modsDir?: string;
-  detectAndSkipTranslatedString?: boolean = false;
+  skipTranslatedString?: boolean = false;
 }
 
 declare interface stringTranslatorOptions extends translateOptions {
-  detectAndSkipTranslatedString?: boolean = false;
+  skipTranslatedString?: boolean = false;
   exTransLib?: any
 }
 
