@@ -23,36 +23,37 @@ declare interface translateOptions {
   exTransLib?: any;
 }
 
-
 declare interface translator {
   (options?: translateOptions): Promise<string>;
 }
 
-declare interface i18nTranslatorOptions extends translateOptions {
+
+declare interface modTranslatorOptions extends translateOptions {
+  readonly sourceLanguage: translateOptions.from;
+  readonly translationLanguage: translateOptions.to;
+  readonly overwriteOrigin?: boolean = false;
+  readonly outputDir: string;
+  readonly fileList?: string;
+  readonly modName: string;
+  readonly modPath: string;
+  readonly modsDir?: string;
+  readonly gamePath?: string;
+  readonly skipTranslatedString?: boolean = false;
+  readonly exTransLib?: any
+}
+
+declare interface i18nTranslatorOptions extends modTranslatorOptions {
   
 }
 
-declare interface mcmTranslatorOptions extends translateOptions {
-  overwriteOrigin?: boolean = false;
-  outputDir: string;
+declare interface mcmTranslatorOptions extends modTranslatorOptions {
+
 }
 
-declare interface espTranslatorOptions extends translateOptions {
-  overwriteOrigin?: boolean = false;
-  outputDir: string;
-}
+declare interface espTranslatorOptions extends modTranslatorOptions {
 
-
-declare interface modTranslatorOptions extends translateOptions {
-  overwriteOrigin?: boolean = false;
-  outputDir?: string;
-  fileList?: string;
-  modsDir?: string;
-  skipTranslatedString?: boolean = false;
 }
 
 declare interface stringTranslatorOptions extends translateOptions {
   skipTranslatedString?: boolean = false;
-  exTransLib?: any
 }
-

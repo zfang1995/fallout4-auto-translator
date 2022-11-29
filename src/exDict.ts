@@ -1,3 +1,6 @@
+// ---
+// extend dictionary for compare translation.
+// ---
 import fsJetpack from 'fs-jetpack';
 import path from 'path';
 import {default as stringTranslator, isTranslated} from './translator/string.js';
@@ -9,9 +12,10 @@ export default class ExternalTranslationLibrary {
   originalDocs: string;
   translationsPath: string[] | undefined;
   targetTranslations: string;
-  constructor(modPath:string, {from:originLanguage = 'en', to:targetLanguage}:translateOptions) {
+  constructor(modPath:string, {from = 'en', to}:translateOptions) {
+    const sourceLanguage = from, translationLanguage = to;
     const translationsDir = `${modPath}\\Interface\\Translations`;
-    this.dict = {[originLanguage]:{},[targetLanguage]:{}};
+    this.dict = {[from]:{},[translationLanguage]:{}};
     // 从现有的文件中读取原本和译本。
     this.originalDocs = '';
     this.targetTranslations = '';
@@ -19,10 +23,10 @@ export default class ExternalTranslationLibrary {
     const translationsPath = fsJetpack.list(translationsDir)?.map(file => path.join(translationsDir, file));
     translationsPath && translationsPath.forEach(filePath => {
       const iso639Code = path.basename(filePath.toLowerCase(), '.txt').split('_').pop();
-      if (iso639Code === originLanguage) {
+      if (iso639Code === sourceLanguage) {
         this.originalDocs = fsJetpack.read(filePath, 'utf8') || '';
-      } else if (iso639Code === targetLanguage) {
-        this.dict[targetLanguage]['%filePath%'] = filePath;
+      } else if (iso639Code === translationLanguage) {
+        this.dict[translationLanguage]['%filePath%'] = filePath;
         this.targetTranslations = fsJetpack.read(filePath, 'utf8') || '';
         mayTranslated =(!!this.targetTranslations) && (this.targetTranslations !== this.originalDocs);
       }      
@@ -34,14 +38,14 @@ export default class ExternalTranslationLibrary {
       this.targetTranslations.split('\r\n')
       .map((line:string) => line.split('\t'))
       .forEach(([key, value]:string[]) => {
-        this.dict[targetLanguage][key] = value;
+        this.dict[translationLanguage][key] = value;
       });
     }
     this.originalDocs?.split('\r\n')
     .map(line => line.split('\t'))
     .forEach(([key, value]) => {
-      this.dict[originLanguage][key] = value;
-      this.dict[targetLanguage][key] = (mayTranslated && isTranslated(this.dict[targetLanguage][key], targetLanguage)) ? this.dict[targetLanguage][key] : stringTranslator(value, {from:originLanguage,to:targetLanguage});
+      this.dict[sourceLanguage][key] = value;
+      this.dict[translationLanguage][key] = (mayTranslated && isTranslated(this.dict[translationLanguage][key], translationLanguage)) ? this.dict[translationLanguage][key] : stringTranslator(value, {from,to});
     });
   }
 
