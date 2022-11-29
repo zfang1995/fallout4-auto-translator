@@ -1,5 +1,4 @@
 import translate from "translate";
-const defaultTranslateOptions:translateOptions = {from: "en", to: "zh"};
 import promiseRetry from "promise-retry";
 import { OperationOptions as retryOptions } from "retry"
 
@@ -34,7 +33,7 @@ const isTranslated = (text: string, targetLanguage: string): boolean => {
 
 
 
-const stringTranslator = partial(pLimit(16), function (text:string, options:stringTranslatorOptions = defaultTranslateOptions) {
+const stringTranslator = partial(pLimit(16), function (text:string, options:stringTranslatorOptions) {
   let translating: Promise<string>;
   if (text) {
     if (options && (options.skipTranslatedString && isTranslated(text, options.to))) {

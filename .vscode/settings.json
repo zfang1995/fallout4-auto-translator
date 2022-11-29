@@ -3,5 +3,7 @@
     "deepmerge",
     "endwith",
     "keybinds"
-  ]
+  ],
+  "todo-tree.tree.showBadges": true,
+  "todo-tree.tree.scanMode": "workspace only"
 }

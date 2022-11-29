@@ -11,8 +11,8 @@
     ]
   },
   "scripts": {
-    "test": "tsc && node ./dist/index.js --modsDir playground\\mods --fileList playground\\mcmlist.txt --bilingual",
-    "build": "nexe --input ./dist/index.js --output ./releases",
+    "test": "tsc && node ./dist/app-cli.js --modsDir playground\\mods --fileList playground\\mcmlist.txt",
+    "build": "nexe --input ./dist/app-cli.js --output ./releases",
     "test:translate-mcm": "node ./test/translate-mcm.js"
   },
   "author": "zfang1995",

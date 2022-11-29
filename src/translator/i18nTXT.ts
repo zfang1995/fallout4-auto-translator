@@ -4,7 +4,7 @@ import stringTranslator from './string.js';
 
 export default async function i18nTXT(originalDocPath:string, options:i18nTranslatorOptions):Promise<string> {
   let translation = '';
-  // const translationPath = path.dirname(originalDocPath)+path.basename(originalDocPath).replace(capitalize(originIso639Code), capitalize(options.to));
+  // const translationPath = path.dirname(originalDocPath)+path.basename(originalDocPath).replace(capitalize(originIso639Code), capitalize(options.translationLanguage));
   const translateQueue = (fsJetpack.read(originalDocPath, 'utf8') || '')
     .split('\r\n')
     .map(async (line:string) => {
