@@ -27,10 +27,9 @@ declare interface translator {
   (options?: translateOptions): Promise<string>;
 }
 
-
-declare interface modTranslatorOptions extends translateOptions {
-  readonly sourceLanguage: translateOptions.from;
-  readonly translationLanguage: translateOptions.to;
+declare interface appCliOptions extends translateOptions {
+  readonly from: string;
+  readonly to: string;
   readonly overwriteOrigin?: boolean = false;
   readonly outputDir: string;
   readonly fileList?: string;
@@ -39,7 +38,14 @@ declare interface modTranslatorOptions extends translateOptions {
   readonly modsDir?: string;
   readonly gamePath?: string;
   readonly skipTranslatedString?: boolean = false;
-  readonly exTransLib?: any
+  readonly exDict: string
+}
+
+type ExDict = import('../exDict').default;
+declare interface modTranslatorOptions extends appCliOptions {
+  readonly sourceLanguage: appCliOptions.from;
+  readonly translationLanguage: appCliOptions.to;
+  readonly exDict: ExDict
 }
 
 declare interface i18nTranslatorOptions extends modTranslatorOptions {
@@ -54,6 +60,6 @@ declare interface espTranslatorOptions extends modTranslatorOptions {
 
 }
 
-declare interface stringTranslatorOptions extends translateOptions {
-  skipTranslatedString?: boolean = false;
+declare interface stringTranslatorOptions extends modTranslatorOptions {
+
 }

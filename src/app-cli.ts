@@ -8,6 +8,7 @@ translatorCLI
   .description('translate multiple fallout4 mods in seconds.')
   .version('1.0.0')
   .option('--bilingual', 'provide bilingual translation.', false)
+  .option('--exDict <esp or json file path>', 'use a external dictionary for compare translation')
   .option('--fileList <path>', 'provide a file list to translate.')
   .option('--from <source language>', 'source language',  'en')
   .option("--gameDir <path>", "specify game path")

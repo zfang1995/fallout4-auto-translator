@@ -20,10 +20,14 @@ const mcmTranslator = async function mcmTranslator(mcmConfigPath:string, options
         // || (this.parent?.key === 'options' && this.parent.parent?.key === 'valueOptions' )
         // ↑ valueOptions 的值通常都是1~2个词的短句，翻译工具很难凭借如此少量的信息给出准确的翻译，所以这里不翻译 valueOptions。
       ) {
-        let text:string = val;
-        let translating = new Promise((resolve) => {
-          resolve(stringTranslator(text, options));
-        }).then(translatedText => this.update(translatedText));
+        let sourceString:string = val;
+        let matched = sourceString.match(/(?<=\>)([^<].*[^>])(?=\<)/), sourceStringIsHtml = matched;
+        let sourceText = sourceStringIsHtml ? (<RegExpMatchArray>matched)[0] : sourceString;
+        let translating = stringTranslator(sourceText, options)
+          .then(translatedText => {
+            if (sourceStringIsHtml) translatedText = sourceString.replace(sourceText, translatedText)
+            this.update(translatedText)
+          })
         translateQueue.push(translating);
       }
     })

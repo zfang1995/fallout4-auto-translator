@@ -17,14 +17,15 @@ const pathSlice = function (filePath:string, start?:number, end?:number) {
 
 
 
-const fallout4AutoTranslator = async function fallout4Translator(options:modTranslatorOptions) {
+const fallout4AutoTranslator = async function fallout4Translator(_options:appCliOptions) {
 
   // 预处理输入的参数
-  options = {
-    ...options,
-    outputDir: options.outputDir || `${options.modsDir || process.cwd()}/[${options.to}] translations - autoTranslator appData`,
-    translationLanguage: options.to,
-    sourceLanguage: options.from
+  const options :modTranslatorOptions = {
+    ..._options,
+    outputDir: _options.outputDir || `${_options.modsDir || process.cwd()}/[${_options.to}] translations - autoTranslator appData`,
+    translationLanguage: _options.to,
+    sourceLanguage: _options.from,
+    exDict: new ExDict(_options)
   };
   const translateQueue: Promise<any>[] = [];
 
@@ -61,7 +62,6 @@ const fallout4AutoTranslator = async function fallout4Translator(options:modTran
       const modFiles = fsJetpack.list(modDir) || [];
       // 跳过已翻译的模组。
       if (modName.endsWith('autoTranslator appData')) continue;
-      //// options = {...options, exTransLib:  new ExDict(modDir, options)}
       // 逐个检测模组内的每个文件，然后将需要翻译的内容提交到等待翻译的队列中。
       for (const fileName of modFiles) {
         const filePath = path.resolve(modDir, fileName);
